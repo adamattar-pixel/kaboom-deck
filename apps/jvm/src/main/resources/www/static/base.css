@@ -1,0 +1,77 @@
+/* base.css - Styles globaux et éléments de base */
+
+/* s'assure que le html et le body occupent toute la hauteur et largeur disponibles
+   et supprime les marges par défaut du navigateur */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+/* style global de la page : fond en dégradé radial, police et couleur du texte */
+body {
+  background: radial-gradient(circle at center, #7a0f0f, #2b0000);
+  font-family: 'Arial', sans-serif;
+  color: #fff4f4;
+}
+
+/* conteneur principal de l'application
+   - width/max-width pour empêcher le débordement horizontal
+   - min-height pour que le conteneur prenne au moins toute la hauteur visible
+   - flex pour organiser les enfants verticalement et les centrer horizontalement */
+section#app, main#root.app.kitten {
+  width: 100vw;
+  max-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* empile du haut vers le bas */
+  align-items: center;         /* centre horizontalement */
+  margin: 0;
+  padding: 24px 0;
+  box-sizing: border-box;      /* inclut padding dans le calcul de la taille */
+}
+
+/* titre secondaire : espacement et centrage
+   note : margin-left négatif pour un positionnement spécifique (vérifier si voulu) */
+h2 {
+  margin-bottom: 0.5rem;
+  text-align: center;
+  margin-left: -260px;
+}
+
+/* style de base pour tous les boutons :
+   - dégradé rouge, coins arrondis, ombre pour effet "relevé"
+   - transition pour l'animation au survol/press */
+button {
+  background: linear-gradient(to bottom, #ff2a2a, #b00000);
+  color: white;
+  border: none;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #6d0000; /* ombre simulant un bouton surélevé */
+  transition: transform 0.1s, box-shadow 0.1s;
+  z-index: 20;
+}
+
+/* état au survol : léger déplacement vers le haut et lueur rouge */
+button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 0 #6d0000,
+    0 0 8px rgba(255,0,0,0.8);
+}
+
+/* état quand on clique (pressé) : déplacement vers le bas et ombre réduite */
+button:active {
+  transform: translateY(1.5px);
+  box-shadow: 0 1.5px 0 #6d0000;
+}
+
+/* bouton spécifique (probablement le bouton "draw") : taille et marge */
+.draw-button {
+  margin-bottom: 12px;
+  width: 72px;
+}

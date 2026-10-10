@@ -1,0 +1,15 @@
+/* kittens.css - Fichier principal d'import */
+
+/* Importe tous les modules CSS dans l'ordre logique */
+
+@import url('base.css');           /* Styles globaux et boutons */
+@import url('game-layout.css');    /* Structure du jeu */
+@import url('players.css');        /* Autres joueurs */
+@import url('cards.css');          /* Cartes et main */
+@import url('piles.css');          /* Pioche et défausse */
+@import url('panels.css');         /* Panneaux interactifs */
+@import url('countdown.css');     /* Comptes à rebours */
+@import url('leaderboard.css');    /* Classement final */
+@import url('notifications.css');  /* Journal et toasts */
+@import url('turns.css');          /* Compteur de tours restants */
+@import url('splash.css');         /* Écrans splash */

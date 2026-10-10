@@ -1,0 +1,121 @@
+/* splash.css - Écrans splash de début et de fin*/
+
+/* Overlay splash (start et end)
+   - element fixe positionné au-dessus de l'UI (z-index élevé)
+   - top/left définissent la zone; translateX(-50%) recentre horizontalement par rapport à left
+     (ici left:20% + translateX(-50%) positionne le centre du splash autour de 20% de la fenêtre).
+   - pointer-events: none empêche tout clic sur l'overlay lorsque c'est juste visuel.
+   - opacity: 0 par défaut — l'affichage se fait via classes d'animation ajoutées par JS.
+*/
+.start-splash {
+  position: fixed;
+  top: 160px;
+  left: 20%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  margin: 0;
+}
+
+/* Utiliser .hidden pour masquer complètement l'élément
+   - display: none permet d'enlever l'élément du flux d'affichage (gain de perf,
+     utile après la fin des animations si on ne veut plus le montrer).
+*/
+.start-splash.hidden {
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Image/élément visuel du splash
+   - taille limitée pour garder un rendu cohérent sur divers écrans
+   - transform-origin centré + will-change indique au navigateur d'optimiser les transformations/opacity
+     (utile pour des animations fluides).
+*/
+.start-splash > img {
+  width: 96px;
+  height: auto;
+  max-height: 134px;
+  object-fit: contain;
+  display: block;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+/* Animation zoom-in (commence petit -> devient grand)
+   - 0% : petit et invisible
+   - 60% : légèrement plus grand que la taille finale et visible (pop)
+   - 100% : taille finale agrandie (effet dramatique)
+   - conçue pour être utilisée avec animation: ... forwards afin de conserver l'état final.
+*/
+@keyframes splash-zoom {
+  0% {
+    transform: scale(0.4) rotate(5deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.4) rotate(5deg);
+    opacity: 1;
+  }
+}
+
+/* Sélecteurs qui déclenchent l'animation zoom-in
+   - plusieurs variantes supportées pour la flexibilité (avec ou sans double préfixe)
+   - animation: forwards garde l'état final (scale(1.4)), durée 800ms, easing personnalisé
+   - JS : ajouter la classe .start-splash--anim (ou .start-splash.start-splash--anim) pour lancer.
+*/
+.start-splash.start-splash--anim,
+.start-splash--anim,
+.start-splash.start-splash--anim > img,
+.start-splash--anim > img {
+  animation: splash-zoom 800ms cubic-bezier(.2,.8,.2,1) forwards;
+  opacity: 1;
+}
+
+/* Animation fade-out après la phase "hold"
+   - maintient la taille finale puis réduit l'opacité progressivement jusqu'à 0
+   - utile pour faire disparaitre doucement le splash après l'avoir affiché
+   - JS : après un délai, remplacer/ajouter .start-splash--fade pour lancer la disparition.
+*/
+@keyframes splash-fade {
+  0% {
+    opacity: 1;
+    transform: scale(1.4) rotate(5deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.4) rotate(5deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4) rotate(5deg);
+  }
+}
+
+/* Classe qui applique le fade-out (2000ms linear)
+   - forwards garde l'opacité finale (0)
+   - après l'animation, JS peut ajouter .hidden pour retirer l'élément (display:none)
+*/
+.start-splash--fade,
+.start-splash--fade > img {
+  animation: splash-fade 2000ms linear forwards;
+  opacity: 0;
+}
+
+/* Notes d'utilisation (JS côté client)
+   - Pour afficher : retirer .hidden (si présent), puis ajouter .start-splash--anim.
+   - Pour cacher ensuite : ajouter .start-splash--fade ; après la fin (2000ms),
+     ajouter .hidden si vous souhaitez retirer l'élément du rendu.
+   - pointer-events reste à none par défaut ; si vous voulez que l'utilisateur
+     interagisse (ex: cliquer pour skip), basculez pointer-events et gérez les handlers.
+*/

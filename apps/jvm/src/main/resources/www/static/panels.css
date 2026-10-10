@@ -1,0 +1,222 @@
+/* panels.css - Panneaux interactifs et conteneurs*/
+
+/* Conteneur combinant la main et la zone de pioche.
+   - display:flex aligne horizontalement les éléments enfants (main + draw)
+   - align-items:flex-end pousse les éléments vers le bas pour aligner visuellement les cartes/piles
+   - gap espace entre éléments
+   - align-self center pour centrer ce conteneur dans son parent flex si nécessaire
+*/
+.hand-and-draw-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  margin-top: 0;
+  align-self: center;
+  margin-bottom: 8px;
+
+  /* Ne pas dépasser la largeur du parent */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Pile (stack) verticale contenant éléments reliés à la main.
+   - flex-direction:column empile verticalement (par ex. indicateurs, boutons au-dessus/au-dessous de la main)
+   - position:relative pour positionner des popups absolus (ex: favour-picker) par rapport à cette pile
+*/
+.hand-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  position: relative;
+
+  /* Ne pas dépasser 90% de la largeur du parent et centrer horizontalement */
+  width: 100%;
+  max-width: 90%;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+/* Panneau pour insérer une bombe.
+   - Utilisé pour obtenir des valeurs (input) et un bouton d'envoi.
+   - padding + border-radius rendent l'élément confortable à l'œil et cliquable.
+   - box-shadow ajoute de la profondeur pour le distinguer du fond.
+*/
+.insert-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(0, 60, 0, 0.55);
+  border: 1px solid #3ad45a;
+  border-radius: 8px;
+  padding: 8px 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+/* Titre / aide dans le panneau d'insertion.
+   - petite taille et forte graisse pour hiérarchiser l'information.
+*/
+.insert-title {
+  font-weight: 700;
+  color: #c8ffd7;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.insert-help {
+  font-size: 0.75rem;
+  color: #a2f0b4;
+  text-align: center;
+}
+
+/* Ligne qui regroupe input + bouton dans le panneau.
+   - display:flex pour aligner horizontalement l'input et le bouton
+*/
+.insert-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style de l'input :
+   - largeur fixe pour éviter que le champ n'étire le layout
+   - bord visible + fond semi-transparent pour rester lisible sur différents arrière-plans
+   - text-align:center approprié pour une entrée numérique courte
+*/
+.insert-input {
+  width: 86px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #28c65f;
+  background: rgba(0, 100, 0, 0.4);
+  color: #eaffed;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Focus visible pour l'accessibilité : met en évidence le champ quand il reçoit le focus clavier */
+.insert-input:focus {
+  outline: 1px solid #3ad45a;
+}
+
+/* Bouton d'envoi du panneau d'insertion.
+   - couleurs vives pour indiquer action positive
+   - min-width pour uniformiser la taille des boutons
+*/
+.insert-btn {
+  background: linear-gradient(135deg, #2ac95f, #139f42);
+  color: #eaffed;
+  border: 1px solid #0c7a32;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+  padding: 8px 12px;
+  border-radius: 6px;
+  min-width: 70px;
+  font-weight: 700;
+}
+
+/* Effets d'interaction : hover / active
+   - hover : légère augmentation de luminosité pour retour visuel
+   - active : translation pour simuler l'enfoncement du bouton
+*/
+.insert-btn:hover {
+  filter: brightness(1.05);
+}
+
+.insert-btn:active {
+  transform: translateY(1px);
+}
+
+/* Sélecteur de joueur (favour-picker)
+   - position:absolute placé au-dessus de l'élément parent (bottom: calc(100% + 28px))
+   - left:50% + transform:translateX(-50%) centre horizontalement par rapport au parent
+   - z-index élevé pour s'assurer qu'il apparaît au-dessus des cartes
+*/
+.favour-picker {
+  position: absolute;
+  bottom: calc(100% + 28px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 30% 30%, rgba(0,0,0,0.95), rgba(20,20,20,0.9));
+  border: 2px solid #4c4c4c;
+  border-radius: 10px;
+  color: #f2f2f2;
+  padding: 10px 12px;
+  min-width: 240px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.55);
+  z-index: 30;
+}
+
+/* Titre et boutons internes du sélecteur
+   - flex-wrap permet d'afficher proprement plusieurs boutons sur petits écrans
+*/
+.favour-picker-title {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.favour-picker-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Boutons de choix dans favour-picker : style neutre mais lisible */
+.favour-picker-btn {
+  background: linear-gradient(135deg, #1b1b1b, #2f2f2f);
+  color: #f2f2f2;
+  border: 1px solid #5a5a5a;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+  min-width: 90px;
+  font-weight: 700;
+}
+
+.favour-picker-btn:hover {
+  filter: brightness(1.05);
+}
+
+.favour-picker-btn:active {
+  transform: translateY(1px);
+}
+
+/* Prompt pour donner une carte (giving-prompt)
+   - Similaire à favour-picker mais souvent utilisé uniquement comme info visuelle
+   - pointer-events: none par défaut pour éviter d'interrompre interactions si c'est juste informatif
+*/
+.giving-prompt {
+  position: absolute;
+  bottom: calc(100% + 28px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 30% 30%, rgba(0,0,0,0.95), rgba(25,25,25,0.9));
+  border: 2px solid #3d3d3d;
+  border-radius: 10px;
+  color: #f2f2f2;
+  padding: 10px 12px;
+  min-width: 240px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.55);
+  z-index: 32;
+  pointer-events: none;
+}
+
+/* Contenu textuel du prompt : titre + sous-texte */
+.giving-prompt-title {
+  display: block;
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.giving-prompt-sub {
+  display: block;
+  font-size: 0.8rem;
+  color: #dcdcdc;
+}

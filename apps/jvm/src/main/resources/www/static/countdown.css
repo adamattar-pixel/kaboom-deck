@@ -1,0 +1,246 @@
+/* countdowns.css - Comptes à rebours et fenêtres temporisées */
+
+/* Compte à rebours Defuse
+   - position: absolute placé relativement au conteneur parent (souvent la carte)
+   - bottom/left + transform centrent l'élément horizontalement et le descendent sous la carte
+   - min-width/padding contrôlent la taille minimale et l'espace intérieur
+   - background/border/border-radius contrôlent l'apparence
+   - box-shadow ajoute de la profondeur
+   - transition sur box-shadow pour un effet au hover
+   - overflow:hidden évite que la barre de progression dépasse le conteneur
+   - La barre .defuse-bomb-bar ajuste sa largeur via JS pour montrer le temps restant
+*/
+.defuse-bomb {
+  position: absolute;
+  bottom: -92px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 160px;
+  padding: 8px 12px;
+  background: rgba(0,40,0,0.82);
+  border: 2px solid #53ff6b;
+  border-radius: 8px;
+  color: #eaffea;
+  font-size: 0.78rem;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: box-shadow 0.1s ease;
+}
+
+.defuse-bomb:hover {
+  /* léger agrandissement d'ombre au survol pour indiquer interactivité */
+  box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+  transform: translateX(-50%);
+}
+
+.defuse-bomb:active {
+  /* conserve la position lors du clic */
+  transform: translateX(-50%);
+}
+
+/* La "barre" qui montre le temps restant.
+   - positionne 2px à l'intérieur pour créer un effet de marge interne
+   - background en dégradé pour visibilité
+   - opacity atténue la barre pour laisser le texte lisible
+   - transition: width permet l'animation fluide quand JS met à jour la largeur (ex: style.width = '50%')
+*/
+.defuse-bomb-bar {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  background: linear-gradient(90deg, #9bff9b, #29e655);
+  border-radius: 6px;
+  opacity: 0.22;
+  transition: width 0.1s linear;
+}
+
+/* Labels et valeurs en premier plan (z-index:1) pour être lisibles au-dessus de la barre */
+.defuse-bomb-label {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+}
+
+.defuse-bomb-time {
+  position: relative;
+  z-index: 1;
+  margin-left: 6px;
+  color: #c5ffd0;
+}
+
+/* Compte à rebours Nope — même principe que defuse mais style rouge */
+.put-nope {
+  position: absolute;
+  bottom: -46px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 140px;
+  padding: 6px 10px;
+  background: rgba(40,0,0,0.8);
+  border: 2px solid #ff4d4d;
+  border-radius: 8px;
+  color: #ffecec;
+  font-size: 0.75rem;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+  transition: box-shadow 0.1s ease;
+}
+
+.put-nope:hover {
+  box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+  transform: translateX(-50%);
+}
+
+.put-nope:active {
+  transform: translateX(-50%);
+}
+
+/* Barre de progression du Nope (largeur modifiée par JS pour indiquer temps restant) */
+.put-nope-bar {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  background: linear-gradient(90deg, #ff6b6b, #ff1e1e);
+  border-radius: 6px;
+  opacity: 0.25;
+  transition: width 0.1s linear;
+}
+
+.put-nope-label {
+  position: relative;
+  z-index: 1;
+  font-weight: 600;
+}
+
+.put-nope-time {
+  position: relative;
+  z-index: 1;
+  margin-left: 6px;
+  color: #ffc9c9;
+}
+
+/* Compte à rebours Forecast — non interactif (pointer-events: none)
+   - utilisé pour afficher un compte à rebours informatif sans permettre le clic
+   - z-index règle l'empilement par rapport aux autres éléments
+*/
+.forecast-countdown {
+  position: absolute;
+  bottom: -72px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 170px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 40, 0.82);
+  border: 2px solid #68b6ff;
+  border-radius: 8px;
+  color: #e8f3ff;
+  font-size: 0.78rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+  pointer-events: none;
+  text-align: center;
+  z-index: 8;
+}
+
+.forecast-countdown-bar {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  background: linear-gradient(90deg, #9ad4ff, #3ca8ff);
+  border-radius: 6px;
+  opacity: 0.22;
+  transition: width 0.1s linear;
+}
+
+.forecast-countdown-label {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+}
+
+.forecast-countdown-time {
+  position: relative;
+  z-index: 1;
+  margin-left: 6px;
+  color: #cfe7ff;
+}
+
+/* Visualisation de cartes (aperçu) */
+.viewing-countdown {
+  /* placé au-dessus de la carte (bottom: calc(100% + 96px)) pour apparaître au-dessus */
+  position: absolute;
+  bottom: calc(100% + 96px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 190px;
+  padding: 8px 12px;
+  background: rgba(30, 0, 40, 0.88);
+  border: 2px solid #b784ff;
+  border-radius: 9px;
+  color: #f0e6ff;
+  font-size: 0.8rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+  pointer-events: none; /* empêche l'interaction pendant la visualisation */
+  text-align: center;
+  z-index: 30;
+}
+
+.viewing-countdown-bar {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  background: linear-gradient(90deg, #d5b3ff, #a66bff);
+  border-radius: 6px;
+  opacity: 0.26;
+  transition: width 0.1s linear;
+}
+
+.viewing-countdown-label {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+}
+
+.viewing-countdown-time {
+  position: relative;
+  z-index: 1;
+  margin-left: 6px;
+  color: #e1d2ff;
+}
+
+/* Conteneur des cartes en aperçu (lignes de cartes affichées quand un joueur "visualise") */
+.viewing-cards {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 24;
+  pointer-events: none; /* rend ces aperçus non-interactifs */
+}
+
+/* Style d'une carte d'aperçu
+   - aspect-ratio garantit la proportion
+   - box-shadow + inset ajoutent relief et léger effet interne
+   - taille réduite pour ne pas occuper trop d'espace */
+.viewing-card {
+  width: 64px;
+  aspect-ratio: 7 / 10;
+  background: #fff8ff;
+  border: 2px solid #9d6bff;
+  border-radius: 6px;
+  color: #32004f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 0 5px rgba(200, 140, 255, 0.6);
+}

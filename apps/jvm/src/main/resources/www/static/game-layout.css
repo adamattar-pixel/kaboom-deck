@@ -1,0 +1,76 @@
+/* game-layout.css - Structure et disposition du jeu
+   Explications :
+   - Ce fichier organise la mise en page principale du plateau de jeu en utilisant Flexbox.
+   - Les conteneurs sont dimensionnés pour s'adapter à la fenêtre (vw/vh) tout en gardant
+     des max/min pour éviter les débordements.
+   - position: relative permet d'utiliser des enfants en position: absolute (ex : compteurs,
+     piles, overlays) positionnés par rapport à ces conteneurs.
+*/
+
+/* Wrapper global centré : place le plateau au centre de la page et sert de contexte */
+.game-wrapper {
+  display: flex;                     /* active flexbox pour centrer facilement */
+  justify-content: center;           /* centre horizontalement le contenu */
+  align-items: center;               /* centre verticalement le contenu */
+  width: 100%;                       /* occupe toute la largeur disponible */
+  position: relative;                /* contexte pour éléments absolutely-positioned */
+  margin: 1rem auto 0;               /* espacement externe (haut) et centrage par auto */
+  padding: 24px 0;                   /* espace interne en haut/bas */
+}
+
+/* Conteneur principal du jeu (board) :
+   - encadre visuellement le plateau (bord, dégradé, ombre)
+   - règle la largeur/max-width et la hauteur pour adapter l'interface à l'écran
+   - align-items: stretch permet aux enfants de remplir la hauteur disponible
+*/
+.main-container {
+  display: flex;                     /* met en ligne les sections internes (colonne latérale, centre, etc.) */
+  gap: 2rem;                         /* espace entre les enfants directs */
+  padding: 0 24px;                   /* padding horizontal interne */
+  padding-right: 24px;
+  border: 8px solid #4e1c1c;         /* bord épais autour du plateau */
+  border-radius: 14px;               /* coins arrondis */
+  background: linear-gradient(145deg, #8b1111, #5c0a0a); /* fond stylisé */
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 12px 25px rgba(0,0,0,0.6);
+  position: relative;                /* contexte pour éléments positionnés à l'intérieur */
+  width: 100%;                       /* prend toute la largeur disponible dans son wrapper */
+  max-width: calc(100vw - 300px);    /* limite la largeur pour laisser de la place (ex: sidebar) */
+  height: 90vh;                      /* hauteur relative à la fenêtre pour occuper l'espace */
+  min-height: 90vh;                  /* garantit la même hauteur minimale */
+  box-sizing: border-box;            /* inclut padding/border dans width/height */
+  margin: 0;
+  margin-left: -260px;               /* décalage négatif volontaire (alignement avec d'autres éléments) */
+  align-items: stretch;              /* fait en sorte que les enfants s'étirent sur la hauteur du conteneur */
+}
+
+/* Zone centrale qui contient l'aire de jeu principale
+   - flex: 1 1 auto permet à cette zone de croître et rétrécir pour remplir l'espace
+   - justify-content: space-between répartit l'espace vertical entre ses enfants (haut / bas)
+*/
+.centered-content {
+  display: flex;
+  flex-direction: column;            /* empile verticalement ses enfants */
+  align-items: center;               /* centre horizontalement son contenu */
+  gap: 1.25rem;                      /* espace vertical entre éléments */
+  padding-top: 0;
+  position: relative;                /* contexte local pour éléments absolus */
+  width: 100%;                       /* prend toute la largeur disponible dans .main-container */
+  box-sizing: border-box;
+  flex: 1 1 auto;                    /* s'agrandit pour remplir l'espace restant */
+  height: 100%;                      /* occupe la hauteur du parent */
+  justify-content: space-between;    /* espace distribué entre enfants (par ex. en-tête / zone de jeu / footer) */
+}
+
+/* Conteneur des piles centrales (draw/discard/match piles)
+   - dispose les piles côte à côte et les centre
+   - align-self + margin auto aident à centrer verticalement dans le parent flex
+*/
+.game-center-piles {
+  display: flex;                     /* aligne les piles horizontalement */
+  flex-direction: row;
+  gap: 0.6rem;                       /* espace entre chaque pile */
+  align-items: center;               /* aligne verticalement le contenu des piles */
+  justify-content: center;           /* centre les piles dans leur conteneur */
+  align-self: center;                /* centre ce conteneur par rapport à son parent */
+  margin: auto 0.4rem;               /* top/bottom auto pour centrer verticalement, petites marges latérales */
+}

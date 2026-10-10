@@ -1,0 +1,161 @@
+/* players.css - Styles pour afficher les autres joueurs autour du plateau*/
+
+/* Zone couvrant tout le plateau servant de contexte pour positionner les joueurs.
+   - position: absolute permet de placer chaque .player-container n'importe où sur le plateau.
+   - pointer-events: none empêche cette couche d'intercepter les clics ; les enfants peuvent activer les interactions.
+*/
+.players-zone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* laisse passer les clics vers l'UI principale sauf si un enfant active pointer-events */
+  padding: 0;
+}
+
+/* Conteneur d'un joueur individuel.
+   - position: absolute : ses coordonnées (top/left/right) déterminent l'emplacement autour du plateau.
+   - display:flex permet d'aligner avatar/cartes/texte côte à côte ou en colonne.
+   - pointer-events: all réactive les interactions pour les éléments du joueur.
+*/
+.player-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  pointer-events: all; /* rend ce conteneur et ses enfants cliquables malgré le parent .players-zone */
+}
+
+/* Positionnement d'un joueur en haut (centre haut du plateau).
+   - left:50% + translateX(-50%) centre horizontalement.
+   - flex-direction: column empile verticalement (par ex. nom au-dessus, cartes en dessous). */
+.player-top {
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: column;
+}
+
+/* Joueur à gauche : centré verticalement et alignement des cartes vers la gauche.
+   - row-reverse permet d'afficher l'avatar à gauche des cartes si nécessaire. */
+.player-left {
+  top: 50%;
+  left: 2px;
+  transform: translateY(-50%);
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+/* Joueur à droite : centré verticalement et alignement standard (avatar à gauche, cartes à droite). */
+.player-right {
+  top: 50%;
+  right: 2px;
+  transform: translateY(-50%);
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Étiquette affichant le nom d'un autre joueur près de sa pile de cartes.
+   - position absolute place le label juste au-dessus de la pile.
+   - pointer-events: none rend cette étiquette informative uniquement.
+   - white-space: nowrap évite le retour à la ligne ; utiliser .other-card-name.dead pour indiquer état inactif. */
+.other-card-name {
+  position: absolute;
+  bottom: calc(100% + 6px); /* placé juste au-dessus de la carte */
+  font-size: 0.7rem;
+  color: #fff8f8;
+  background: rgba(0,0,0,0.45);
+  padding: 3px 8px;
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 30;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Variante gauche : aligne l'étiquette sur la gauche de la pile. */
+.other-card-name.left {
+  left: 0;
+  transform: translateX(0);
+  text-align: left;
+}
+
+/* Variante droite : aligne l'étiquette sur la droite de la pile. */
+.other-card-name.right {
+  right: 0;
+  left: auto;
+  transform: translateX(0);
+  text-align: right;
+}
+
+/* Style visuel quand le joueur est "mort" / inactif :
+   - couleur et fond atténués pour signaler l'état. */
+.other-card-name.dead {
+  color: #c6c6c6;
+  background: rgba(0,0,0,0.3);
+}
+
+/* Représentation d'une carte appartenant à un autre joueur.
+   - position absolute pour superposer plusieurs cartes dans un même conteneur (stack).
+   - width + aspect-ratio définissent la taille d'une carte.
+   - transition sur transform pour animations légères au survol/interaction déclenchées par JS.
+*/
+.other-card {
+  position: absolute;
+  width: 72px;
+  aspect-ratio: 7 / 10;
+  background: #2b0000;
+  border-radius: 4px;
+  border: 1.5px solid #ff4d4d;
+  box-shadow: 0 0 4px rgba(255,0,0,0.45);
+  transition: transform 0.12s;
+  top: 0;
+  left: 0;
+}
+
+/* Variante "dead" d'une carte : rend la carte grise et sans ombre (non jouable). */
+.other-card.dead {
+  background: #2d2d2d;
+  border-color: #444;
+  box-shadow: none;
+}
+
+/* Conteneur vertical de plusieurs cartes (pile verticale visible pour un joueur latéral).
+   - height réserve l'espace pour empiler visuellement plusieurs .other-card.
+   - position: relative : chaque .other-card peut être positionnée à l'intérieur. */
+.other-cards-vertical-stack {
+  position: relative;
+  height: 220px;
+  width: 72px;
+}
+
+/* Classes .dead sur les stacks pour atténuer toute la pile quand le joueur est hors-jeu. */
+.other-cards-horizontal-stack.dead,
+.other-cards-vertical-stack.dead {
+  filter: grayscale(0.9) brightness(0.65);
+  opacity: 0.7;
+}
+
+/* Ajustements de marge pour stacks placés à gauche ou à droite afin d'éviter le chevauchement visuel. */
+.player-left .other-cards-vertical-stack {
+  margin-right: 2px;
+}
+
+.player-right .other-cards-vertical-stack {
+  margin-left: 2px;
+}
+
+/* Conteneur pour une rangée horizontale de cartes (par ex. plusieurs cartes visibles côte à côte).
+   - width/height définissent la zone d'affichage ; les .other-card positionnées à l'intérieur peuvent être décalées. */
+.other-cards-horizontal-stack {
+  position: relative;
+  width: 180px;
+  height: 40px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Petite règle visuelle : rend les cartes secondaires légèrement translucides pour hiérarchiser la première carte. */
+.other-card:nth-child(n+2) {
+  opacity: 0.8;
+}
