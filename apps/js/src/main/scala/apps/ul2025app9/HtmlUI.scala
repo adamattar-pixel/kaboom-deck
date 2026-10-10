@@ -145,7 +145,7 @@ class UIInstance(userId: UserId, sendMessage: ujson.Value => Unit, target: dom.E
     updateNotifications(view.log)  // Met à jour les toasts avec les nouveaux logs
     checkAudioTriggers(view)        // Vérifie si un écran d'annonce doit être affiché
     frag(
-      h2(b("Exploding Kittens: "), "Avoid the bombs and play your cards!"),
+      h2(b("Kaboom Deck: "), "Avoid the bombs and play your cards!"),
       div(
         cls := "game-wrapper",
         renderView(view)

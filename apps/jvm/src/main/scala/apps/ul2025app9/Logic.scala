@@ -70,8 +70,8 @@ class Logic extends ClockDrivenStateMachine[Event, State, View]:
 
   override val appInfo: AppInfo = AppInfo(
     id = "ul2025app9",
-    name = "Exploding Kittens",
-    description = "Players try to avoid drawing exploding kittens by playing action cards. Last player alive wins!",
+    name = "Kaboom Deck",
+    description = "Players try to avoid drawing bombs by playing action cards. Last player alive wins!",
     year = 2025
   )
 

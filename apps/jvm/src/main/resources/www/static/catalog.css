@@ -1,0 +1,25 @@
+/* catalog.css - Titre texte "Kaboom Deck" sur la carte de l'application dans le catalogue */
+
+/* Masque l'image (absente) de la carte de l'application */
+.app-grid a[href$="/ul2025app9"] figure img {
+  display: none;
+}
+
+/* Remplace l'image par un titre texte de même taille (carré blanc) */
+.app-grid a[href$="/ul2025app9"] figure::before {
+  content: "Kaboom Deck";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  background: white;
+  color: #c62828;
+  font-weight: 900;
+  font-size: 1.6em;
+  line-height: 1.1;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
