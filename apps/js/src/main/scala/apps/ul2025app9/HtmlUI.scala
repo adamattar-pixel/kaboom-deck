@@ -54,6 +54,28 @@ class UIInstance(userId: UserId, sendMessage: ujson.Value => Unit, target: dom.E
   private var toastQueue: Vector[(Int, String)] = Vector.empty
   private var toastCounter: Int = 0
 
+  // === Ressources audio ===
+  // Son joué au début d'une partie
+  private val startAudio: html.Audio =
+    val a = dom.document.createElement("audio").asInstanceOf[html.Audio]
+    a.src = "/static/ul2025app9/start.mp3"
+    a.preload = "auto"
+    a
+
+  // Son joué quand un joueur est éliminé
+  private val eliminatedAudio: html.Audio =
+    val a = dom.document.createElement("audio").asInstanceOf[html.Audio]
+    a.src = "/static/ul2025app9/eliminated.mp3"
+    a.preload = "auto"
+    a
+
+  // Son joué à la fin de la partie
+  private val endAudio: html.Audio =
+    val a = dom.document.createElement("audio").asInstanceOf[html.Audio]
+    a.src = "/static/ul2025app9/end.mp3"
+    a.preload = "auto"
+    a
+
   // === Images splash (écrans d'annonce) ===
   // Image affichée au début de la partie avec animation de zoom
   private val startImage: html.Image =
@@ -91,26 +113,40 @@ class UIInstance(userId: UserId, sendMessage: ujson.Value => Unit, target: dom.E
     dom.window.setTimeout(() => startImage.classList.add("start-splash--fade"), 800 + 1000)
     dom.window.setTimeout(() => startImage.className = "start-splash hidden", 800 + 1000 + 2000)
 
-  // === Suivi d'état pour les écrans d'annonce ===
+  // === Suivi d'état pour les déclencheurs audio ===
   private var startPlayed: Boolean = false
+  private var lastOthersAliveCount: Option[Int] = None
   private var lastWasFinished: Boolean = false
   private var turnCounterBaseline: Int = 1
   private var lastTurnOwner: Option[UserId] = None
 
-  // Vérifie les conditions pour déclencher les effets visuels
+  // Vérifie les conditions pour déclencher les effets audio et visuels
   private def checkAudioTriggers(view: View): Unit =
-    // Afficher l'écran de démarrage une seule fois lors du passage à "Playing"
+    // Jouer le son de démarrage une seule fois lors du passage à "Playing"
     view.state match
       case StateView.Playing =>
         if !startPlayed then
+          startAudio.currentTime = 0
+          startAudio.play()
           showStartSplash()
           startPlayed = true
       case _ => ()
 
-    // Afficher l'écran de fin une seule fois lors du passage à "Finished"
+    // Détecter l'élimination d'un joueur (nombre de joueurs vivants diminue)
+    val othersAlive = view.others.count(_.alive)
+    lastOthersAliveCount match
+      case Some(prev) if othersAlive < prev =>
+        eliminatedAudio.currentTime = 0
+        eliminatedAudio.play()
+      case _ => ()
+    lastOthersAliveCount = Some(othersAlive)
+
+    // Jouer le son de fin une seule fois lors du passage à "Finished"
     view.state match
       case StateView.Finished(_) =>
         if !lastWasFinished then
+          endAudio.currentTime = 0
+          endAudio.play()
           showEndSplash()
         lastWasFinished = true
         // Reset pour permettre un nouveau démarrage si la partie recommence
@@ -143,7 +179,7 @@ class UIInstance(userId: UserId, sendMessage: ujson.Value => Unit, target: dom.E
   // Méthode principale de rendu appelée à chaque mise à jour de la vue
   def render(userId: UserId, view: View): Frag =
     updateNotifications(view.log)  // Met à jour les toasts avec les nouveaux logs
-    checkAudioTriggers(view)        // Vérifie si un écran d'annonce doit être affiché
+    checkAudioTriggers(view)        // Vérifie si des sons doivent être joués
     frag(
       h2(b("Kaboom Deck: "), "Avoid the bombs and play your cards!"),
       div(

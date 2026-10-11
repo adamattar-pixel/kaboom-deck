@@ -33,7 +33,7 @@ apps/
             Logic.scala   The game: a clock-driven state machine
             Tests.scala   Test suite
   js/       Client side (Scala.js)
-            HtmlUI.scala  Rendering with Scalatags, user input, notifications
+            HtmlUI.scala  Rendering with Scalatags, user input, sounds, notifications
 mockups/    Hand-drawn UI mockups and the draw.io finite state machine
 ```
 
@@ -71,7 +71,7 @@ Other commands: `test` runs the test suite, `packageForDeployment` builds a sing
 
 ## Team
 
-- **Arthur**: game logic, back-end, integration
+- **Arthur Prahin**: game logic, back-end, integration
 - **Adam Attar** and **Saad Amraoui**: front-end, UI, testing
 
 ## Credits
